@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Simran 🌸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --sage: #7B8E7E;
+            --peach: #FCE1D1;
+            --dark-sage: #4A5D4D;
+            --white: #FDFBF9;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--peach);
+            color: var(--dark-sage);
+            overflow-x: hidden;
+        }
+
+        .screen {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Password Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid white;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--sage);
+            text-align: center;
+            font-size: 1.2rem;
+            outline: none;
+        }
+
+        button {
+            background: var(--sage);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button:hover { background: var(--dark-sage); transform: scale(1.05); }
+
+        /* Life Question Styles */
+        .btn-container { position: relative; height: 100px; width: 300px; margin-top: 20px; }
+        #no-btn { position: absolute; }
+
+        /* Letter Styles */
+        .envelope {
+            background: var(--white);
+            padding: 30px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+        }
+        .stamp {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            background: #d4a373;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+            border: 2px dashed white;
+        }
+
+        .fingerprint-btn {
+            font-size: 3rem;
+            cursor: pointer;
+            filter: grayscale(1);
+            transition: 0.3s;
+        }
+        .fingerprint-btn.signed { filter: grayscale(0) sepia(1) saturate(5) hue-rotate(-50deg); }
+
+        /* Polling Section */
+        .scrollable-content {
+            overflow-y: auto;
+            max-height: 80vh;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* Countdown */
+        #timer { font-size: 3rem; font-weight: bold; color: var(--sage); }
+
+        .love-list { font-size: 0.9rem; list-style: none; padding: 0; line-height: 1.8; }
+    </style>
+</head>
+<body>
+
+    <div id="screen1" class="screen active">
+        <div class="glass-card">
+            <h2 style="font-family: 'Dancing Script';">Welcome Simran 🌸</h2>
+            <input type="password" id="passInput" placeholder="Enter Secret Code">
+            <br>
+            <button onclick="checkPassword()">Unlock</button>
+        </div>
+    </div>
+
+    <div id="screen2" class="screen">
+        <h1>Simran... 🌸</h1>
+        <p>Are you ready to spend your whole life together with me?</p>
+        <div class="btn-container">
+            <button id="yes-btn" onclick="goToLetter()">YES ❤️</button>
+            <button id="no-btn" onmouseover="moveNo()" onclick="noClicked()">NO ⚠️</button>
+        </div>
+    </div>
+
+    <div id="screen3" class="screen">
+        <div class="envelope">
+            <div class="stamp">OFFICIAL LOVE</div>
+            <h3>Agreement Letter 🤝🏻</h3>
+            <p>I, Simran, promise to stay by your side through every season, to laugh at your jokes, and to build a beautiful life together forever.</p>
+            <p style="font-size: 1rem;">Mnu bht vadia lgya thde nal rhke, love uuuuuh 🫶🏻</p>
+            <p>Sign with your thumbprint:</p>
+            <div class="fingerprint-btn" id="fp" onclick="signLetter()">👆🏻</div>
+            <p id="sign-status" style="font-size: 0.8rem; display:none;">Signed Forever ✅</p>
+            <button id="next-from-letter" style="display:none;" onclick="goToPolls()">Proceed My Love</button>
+        </div>
+    </div>
+
+    <div id="screen4" class="screen">
+        <div class="glass-card scrollable-content">
+            <h3>Our Little Memories 📅</h3>
+            <p>Relationship Start Date: <b>[Add Your Date Here]</b></p>
+            <p>When did we first meet? <br><input type="text" placeholder="Your Answer..."></p>
+            <p>What do you call me always? <br><input type="text" placeholder="Your Answer..."></p>
+            <p>What is my phone number? <br><input type="text" placeholder="Your Answer..."></p>
+            <button onclick="goToCountdown()">Submit & Enter 2026</button>
+        </div>
+    </div>
+
+    <div id="screen5" class="screen">
+        <h1>Counting down to our Year...</h1>
+        <div id="timer">00:00:00</div>
+        <div id="ny-message" style="display:none;">
+            <h1 style="font-size: 3.5rem;">Happy New Year 2026 Simran! 🎆</h1>
+            <ul class="love-list">
+                <li>Loveuuuh putt 🫂 😘</li>
+                <li>Loveuuuh bache 💗</li>
+                <li>Loveuuuh bugee 😘</li>
+                <li>Loveuuuh shooonea 💗🫶🏻</li>
+                <li>Loveuuuh drlng 😊</li>
+                <li>Loveuuuh kleshn </li>
+                <li>Loveuuuh jnn 🥰 🧿</li>
+                <li>Loveuuuh my pookie girl 🧿 🌸 🫶🏻</li>
+                <li>Loveuuuuuúuuuuh so much 🫶🏻🌸💕</li>
+            </ul>
+            <p><i>Ehda wish kise ne krnaa thnu mthoo elava 😅🫶🏻</i></p>
+        </div>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const pass = document.getElementById('passInput').value;
+            if(pass === "1608") {
+                showScreen('screen2');
+            } else {
+                alert("Incorrect code, my love.");
+            }
+        }
+
+        let noCount = 0;
+        function noClicked() {
+            noCount++;
+            alert("⚠️ Warning: This button is malfunctioning! Try clicking Yes.");
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function goToLetter() { showScreen('screen3'); }
+
+        function signLetter() {
+            document.getElementById('fp').classList.add('signed');
+            document.getElementById('sign-status').style.display = 'block';
+            document.getElementById('next-from-letter').style.display = 'inline-block';
+        }
+
+        function goToPolls() { showScreen('screen4'); }
+
+        function goToCountdown() {
+            showScreen('screen5');
+            startTimer();
+        }
+
+        function startTimer() {
+            // Set for New Year 2026
+            const dest = new Date("Jan 1, 2026 00:00:00").getTime();
+            
+            const x = setInterval(function() {
+                const now = new Date().getTime();
+                const diff = dest - now;
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById("timer").innerHTML = days + "d " + hours + "h " + mins + "m " + secs + "s ";
+
+                if (diff < 0) {
+                    clearInterval(x);
+                    document.getElementById("timer").style.display = "none";
+                    document.getElementById("ny-message").style.display = "block";
+                    fireworks();
+                }
+            }, 1000);
+        }
+
+        function fireworks() {
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
